@@ -1,9 +1,7 @@
-# DOOM Optimizer 🔥
-### PC Gaming Performance Suite — Native Windows Desktop App
+# ☠ DOOM Optimizer 🔥
+**PC Gaming Performance Suite — Native Windows Desktop App**
 
-A real Electron desktop application that applies genuine Windows optimizations:
-registry tweaks, power plans, GPU settings, network tuning, and memory management.
-Packages into a **setup.exe** installer via electron-builder + NSIS.
+A real Electron desktop application that applies genuine Windows optimizations: registry tweaks, power plans, GPU settings, network tuning, and memory management. Packages into a `setup.exe` installer via electron-builder + NSIS.
 
 ---
 
@@ -13,6 +11,7 @@ Packages into a **setup.exe** installer via electron-builder + NSIS.
 - **Node.js 18+** — https://nodejs.org
 - **Windows 10/11 x64** (for the built app to run)
 - **npm** (comes with Node)
+- **Run as Administrator** for system-level tweaks
 
 ### Install & Run (Dev Mode)
 ```bash
@@ -31,7 +30,6 @@ Output: `dist/DOOM Optimizer Setup 2.0.1.exe`
 ---
 
 ## 📁 Project Structure
-
 ```
 doom-optimizer/
 ├── src/
@@ -47,7 +45,8 @@ doom-optimizer/
 ├── assets/
 │   └── icon.ico             ← App icon (add your own 256x256 .ico)
 ├── build/
-│   └── installer.nsh        ← NSIS installer customization
+│   ├── installer.nsh        ← NSIS installer customization
+│   └── license.txt          ← License shown during install
 ├── package.json             ← Electron-builder config + deps
 └── README.md
 ```
@@ -67,6 +66,8 @@ doom-optimizer/
 | BCD Timer | `bcdedit` command | Reduces scheduler jitter |
 | SysMain Off | Windows Service | Less background I/O |
 | Search Off | Windows Service | Prevents index spikes |
+| Visual Effects | `HKCU\Explorer\VisualEffects` | Free GPU/CPU cycles |
+| FSO + Game Mode | `HKCU\Software\Microsoft\GameBar` | Fullscreen optimization |
 
 ### Power Plans
 - Switches via `powercfg /s <GUID>`
@@ -75,6 +76,7 @@ doom-optimizer/
 
 ### Network Optimizer
 - Sets DNS on all active adapters via `Set-DnsClientServerAddress`
+- DNS presets: Google (8.8.8.8), Cloudflare (1.1.1.1), Quad9, OpenDNS
 - Disables TCP auto-tuning via `netsh int tcp`
 - Runs real ping tests with `Test-Connection` (10 packets, measures jitter)
 
@@ -84,9 +86,9 @@ doom-optimizer/
 - Disables memory compression via `Disable-MMAgent`
 
 ### GPU
-- Sets NVIDIA pre-rendered frames via registry
+- Sets NVIDIA pre-rendered frames via registry (1–4 frames)
 - Disables NVIDIA telemetry services
-- HAGS toggle
+- HAGS toggle (Hardware-Accelerated GPU Scheduling)
 
 ---
 
@@ -114,18 +116,19 @@ The installer:
 
 ## 🎨 Adding an Icon
 
-Place a **256x256 .ico** file at `assets/icon.ico`.
+Place a 256x256 `.ico` file at `assets/icon.ico`.
 
 Free tools to create .ico: https://www.icoconverter.com/
 
 ---
 
 ## ⚠️ Safety Notes
-
-- All tweaks are **reversible** (each has a `revert` PowerShell command)
+- **All tweaks are reversible** — each has a `revert` PowerShell command built-in
 - Use the **Backup tab** to create a Windows Restore Point before applying tweaks
 - Spectre/Meltdown mitigation disable is **NOT included** — it's a security risk
-- Tested on Windows 10 21H2 and Windows 11 23H2
+- BCD timer and HAGS changes require a **reboot** to fully take effect
+- Tested on **Windows 10 21H2** and **Windows 11 23H2**
+- Run as **Administrator** for all features to work
 
 ---
 
@@ -133,15 +136,26 @@ Free tools to create .ico: https://www.icoconverter.com/
 
 ```json
 {
-  "electron": "^28.0.0",          ← Desktop app framework
-  "electron-builder": "^24.9.1",  ← Creates setup.exe via NSIS
-  "systeminformation": "^5.21.22",← CPU/RAM/GPU detection
-  "electron-store": "^8.1.0",     ← Persist applied tweaks across sessions
-  "regedit": "^3.0.3",            ← Optional: direct registry reads
-  "node-powershell": "^5.0.1"     ← Optional: alternative PS runner
+  "electron": "^28.0.0",           ← Desktop app framework
+  "electron-builder": "^24.9.1",   ← Creates setup.exe via NSIS
+  "systeminformation": "^5.21.22", ← CPU/RAM/GPU detection
+  "electron-store": "^8.1.0"       ← Persist applied tweaks across sessions
 }
 ```
-## 🤖 AI ASSISTANCE
 
-- This project was organized, structured, and developed with the assistance of artificial intelligence.
-- AI was used to help design system architecture, generate code components, and streamline development, while maintaining full human direction and control over functionality and design.
+---
+
+## 🎮 Tabs Overview
+| Tab | Features |
+|---|---|
+| **Dashboard** | System info, one-click DOOM Mode, global status |
+| **Registry Tweaks** | Toggle 10 individual tweaks, Apply/Revert All |
+| **Power Plans** | List + switch plans, create DOOM Performance Plan |
+| **Network** | DNS presets + custom, TCP optimization, ping test |
+| **Memory** | Live RAM stats, flush standby, disable compression |
+| **GPU Tuning** | NVIDIA pre-render frames, telemetry, HAGS |
+| **Backup** | Create System Restore Point, safety notes |
+
+---
+
+*Built with Electron 28 + NSIS. Real PowerShell. Real results.*
